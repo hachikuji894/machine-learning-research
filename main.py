@@ -1,16 +1,34 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import numpy as np
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+class NeuralNetwork(object):
+    def __init__(self):
+        # define hyper parameters
+        self.inputLayerSize = 2
+        self.outputLayerSize = 1
+        self.hiddenLayerSize = 3
+        # weight
+        self.w1 = np.random.randn(self.inputLayerSize, self.hiddenLayerSize)
+        self.w2 = np.random.randn(self.hiddenLayerSize, self.outputLayerSize)
+
+    def forward(self, x):
+        # propagate inputs though network
+        self.z2 = np.dot(x, self.w1)
+        self.a2 = self.sigmoid(self.z2)
+        self.z3 = np.dot(self.a2, self.w2)
+        yHat = self.sigmoid(self.z3)
+        return yHat
+
+    def sigmoid(self, z):
+        # activation function
+        return 1 / (1 + np.exp(-z))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    x = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
+    y = np.array(([75], [82], [93]), dtype=float)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    nn = NeuralNetwork()
+    yHat = nn.forward(x)
+
+    print(yHat)
