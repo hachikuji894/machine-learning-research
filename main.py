@@ -1,4 +1,8 @@
 import numpy as np
+from matplotlib import cm
+from scipy import optimize
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def sigmoid(z):
@@ -92,9 +96,37 @@ class NeuralNetwork(object):
         return numgrad
 
 
+class Trainer(object):
+    def __init__(self, N):
+        # Make local reference to Neural Network
+        self.N = N
+
+    def costFunctionWrapper(self, params, X, y):
+        self.N.setParams(params)
+        cost = self.N.costFunction(X, y)
+        grad = self.N.computeGradients(X, y)
+        return cost, grad
+
+    def callbackF(self, params):
+        self.N.setParams(params)
+        self.J.append(self.N.costFunction(self.X, self.y))
+
+    def train(self, X, y):
+        self.X = X
+        self.y = y
+        self.J = []
+
+        params0 = self.N.getParams()
+        options = {'maxiter': 200, 'disp': True}
+        _res = optimize.minimize(self.costFunctionWrapper, params0,
+                                 jac=True, method='BFGS', args=(X, y), options=options, callback=self.callbackF)
+        self.N.setParams(_res.x)
+        self.optimizationResults = _res
+
+
 if __name__ == '__main__':
     X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
-    y = np.array(([75], [82], [93]), dtype=float)
+    y = np.array(([0.75], [0.82], [0.93]), dtype=float)
 
     nn = NeuralNetwork()
 
@@ -103,16 +135,55 @@ if __name__ == '__main__':
     # print(yHat)
 
     # test two
-    cost1 = nn.costFunctionPrime(X, y)
-    dJdW1, dJdW2 = nn.costFunctionPrime(X, y)
+    # cost1 = nn.costFunctionPrime(X, y)
+    # dJdW1, dJdW2 = nn.costFunctionPrime(X, y)
+    # print(dJdW1)
+    # print(dJdW2)
 
-    print(dJdW1)
-    print(dJdW2)
+    # test three
+    # numgrad = nn.computeNumericalGradient(X, y)
+    # grad = nn.computeGradients(X, y)
+    # print(numgrad)
+    # print(grad)
 
-    print('#######################')
+    # train the neural network
+    T = Trainer(nn)
+    T.train(X, y)
 
-    numgrad = nn.computeNumericalGradient(X, y)
-    grad = nn.computeGradients(X, y)
+    # plt.plot(T.J)
+    # plt.grid = 1
+    # plt.ylabel('cost')
+    # plt.xlabel('iterations')
+    # plt.show()
+    print(nn.forward(X))
 
-    print(numgrad)
-    print(grad)
+    # test network for various combination of sleep /study
+    hoursSleep = np.linspace(0, 10, 100)
+    hoursStudy = np.linspace(0, 5, 100)
+
+    hoursSleepNorm = hoursSleep / 10
+    hoursStudyNorm = hoursStudy / 5
+
+    a, b = np.meshgrid(hoursSleepNorm, hoursStudyNorm)
+
+    allInputs = np.zeros((a.size, 2))
+    allInputs[:, 0] = a.ravel()
+    allInputs[:, 1] = b.ravel()
+
+    allOuputs = nn.forward(allInputs)
+
+    yy = np.dot(hoursStudy.reshape(100, 1), np.ones((1, 100)))
+    xx = np.dot(hoursSleep.reshape(100, 1), np.ones((1, 100))).T
+
+    cs = plt.contour(xx, yy, 100 * allOuputs.reshape(100, 100))
+    plt.clabel(cs, inline=1, fontsize=10)
+    plt.xlabel('Hours Sleep')
+    plt.ylabel('Hours Study')
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    surf = ax.plot_surface(xx, yy, 100 * allOuputs.reshape(100, 100), cmap=cm.jet)
+    ax.set_xlabel('Hours Sleep')
+    ax.set_xlabel('Hours Study')
+    ax.set_zlabel('Test Score')
+    plt.show()
