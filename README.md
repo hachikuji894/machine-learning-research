@@ -1,6 +1,6 @@
 # machine-learning-research
 
-研究计算机视觉、机器学习所写的 Python 代码，作为学习的记录吧
+研究机器学习、深度学习、计算机视觉所写的 Python 代码，作为学习的记录吧
 
 ### conda 环境配置
 安装
@@ -28,4 +28,10 @@ conda upgrade --all
 python
 import torch
 torch.cuda.is_available()
+~~~
+### BUG
+tensorboard
+~~~
+pip install tb-nightly
+pip install setuptools==59.5.0
 ~~~
