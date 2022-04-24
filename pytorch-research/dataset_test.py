@@ -11,7 +11,7 @@ img, target = test_data[0]
 print(img.shape)
 print(target)
 
-writer = SummaryWriter("../dataloader")
+writer = SummaryWriter("dataloader")
 step = 0
 for data in test_loader:
     imgs, targets = data
