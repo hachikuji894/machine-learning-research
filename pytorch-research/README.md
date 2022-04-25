@@ -1,24 +1,31 @@
 # pytorch-research
 
-研究机器学习、深度学习、计算机视觉所写的 Python 代码，作为学习的记录吧
-
 ### conda 环境配置
 安装
 ~~~
-conda create -n pytorch python=3.9.10
-conda activate pytorch
+conda create -n env_name python=3.6
+conda activate env_name
+conda deactivate env_name
+conda remove -n env_name --all
 
-# conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
-conda install pytorch torchvision torchaudio cudatoolkit=10.2
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 ~~~
-换源，修改配置
+换源，修改配置 /.condarc
 ~~~
 channels:
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
-show_channel_urls: true
+  - defaults
+custom_channels:
+  conda-forge: https://mirrors.bfsu.edu.cn/anaconda/cloud
+  msys2: https://mirrors.bfsu.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.bfsu.edu.cn/anaconda/cloud
+  menpo: https://mirrors.bfsu.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.bfsu.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.bfsu.edu.cn/anaconda/cloud
+default_channels:
+  - https://mirrors.bfsu.edu.cn/anaconda/pkgs/main
+  - https://mirrors.bfsu.edu.cn/anaconda/pkgs/r
+  - https://mirrors.bfsu.edu.cn/anaconda/pkgs/msys2
+show_channel_urls: True
 ~~~
 ~~~
 conda upgrade --all

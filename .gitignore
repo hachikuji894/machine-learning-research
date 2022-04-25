@@ -1,4 +1,8 @@
 .idea
+push.sh
+venv
+
+
 pytorch-research/dataset
 pytorch-research/dataloader
-image_set
+pytorch-research/image_set
