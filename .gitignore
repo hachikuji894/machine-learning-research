@@ -2,7 +2,5 @@
 push.sh
 venv
 
-
-pytorch-research/dataset
-pytorch-research/dataloader
-pytorch-research/image_set
+input
+output
