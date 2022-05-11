@@ -1,0 +1,10 @@
+.idea
+venv
+
+assets
+detection_result
+temp
+video_check
+video
+images
+images_check
